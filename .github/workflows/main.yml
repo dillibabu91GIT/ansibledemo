@@ -25,8 +25,8 @@ jobs:
           BRANCH: ${{ secrets.BRANCH_REPO1 }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          ansible-playbook -e "owner=$OWNER repo=$REPO branch=$BRANCH github_token=$GITHUB_TOKEN" main.yml
-      
+          ansible-playbook -e "owner=$OWNER repo=$REPO branch=$BRANCH github_token=$GITHUB_TOKEN" playbooks/main.yml
+
   deploy-repo2:
     runs-on: ubuntu-latest
     steps:
