@@ -6,10 +6,6 @@
     - name: Read configuration from config.yml
       include_vars:
         file: /root/ansible-jboss/ansible-config-jboss-deploy/config.yml
-
-    - name: Read configuration from config1.yml
-      include_vars:
-        file: /root/ansible-jboss/ansible-config-jboss-deploy/config1.yml
     
     - name: Include ansible-role-jboss-deploy
       include_role:
