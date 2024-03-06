@@ -1,7 +1,16 @@
- - hosts: '{{ target }}'
-    become: yes
-    #become_method: sudo
-    become_user: itdevtra
-    gather_facts: yes
-    roles:
-      - smedeployment
+- name: Deploy War Files to JBoss
+  hosts: target1
+  become: yes
+
+  tasks:
+    - name: Read configuration from config.yml
+      include_vars:
+        file: /root/ansible-jboss/ansible-config-jboss-deploy/config.yml
+
+    - name: Read configuration from config1.yml
+      include_vars:
+        file: /root/ansible-jboss/ansible-config-jboss-deploy/config1.yml
+    
+    - name: Include ansible-role-jboss-deploy
+      include_role:
+        name: ansible-role-jboss-deploy
