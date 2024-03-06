@@ -4,8 +4,8 @@
   vars:
     github_token: "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"
     owner: "dillibabu91GIT"
-    repo: "jboss-deploy"
-    branch: "master"
+    repo: "Ansible-1"
+    branch: "main"
     jboss_user: "demo"  # JBoss username
     jboss_password: "test123"  # JBoss password
 
