@@ -1,55 +1,29 @@
-- name: Stop JBoss
-  #become: true 
-  #become_user: itdevtra
-  #command: "/apps/JBOSSEAP7.2_DIGITAL_BANK/EAP-7.2.0/bin/jboss-cli.sh --connect controller={{ jboss_controller }} command=:shutdown"
-  #ignore_errors: yes
-- name: Download WAR
-  delegate_to: localhost
-  run_once: true
-  get_url:
-    url: "{{ war_file_url }}"
-    dest: "/tmp/{{ war_file_name }}"
+- name: Get list of .war files in the GitHub repository
+  uri:
+    url: "https://api.github.com/repos/{{ owner }}/{{ repo }}/contents?ref={{ branch }}"
+    method: GET
     headers:
       Authorization: "token {{ github_token }}"
-#- name: Copy WAR to Target Server
-  #copy:
-    #src: "/tmp/{{ war_file_name }}"
-    #dest: "{{ jboss_deployments_dir }}/{{ war_file_name }}"
-#- name: Start JBoss 
-  #become: true 
-  #become_user: itdevtra
-  #command: /apps/JBOSSEAP7.2_DIGITAL_BANK/EAP-7.2.0/bin/STARTJBOSSEAP7.2_DIGITAL_BANK.sh
-- name: Clean up WAR from Runner
-  delegate_to: localhost
-  file:
-    path: "/tmp/{{ war_file_name }}"
-    state: absent
-  run_once: true
+  register: github_response
 
+- name: Download .war files from GitHub repository
+  get_url:
+    url: "{{ item.download_url }}"
+    dest: "/tmp/{{ item.name }}"
+    headers:
+      Authorization: "token {{ github_token }}"
+  loop: "{{ github_response.json | selectattr('name', 'match', '.*\\.war$') | list }}"
 
-workflow
-name: Deploy WAR to JBoss
+- name: Copy .war files to JBoss deployment directory
+  ansible.builtin.copy:
+    src: "/tmp/{{ item.name }}"
+    dest: "/opt/wildfly/standalone/deployments/"
+    owner: "wildfly"
+    group: "wildfly"
+    mode: '0777'
+    remote_src: yes  # Copy from Ansible controller
+  loop: "{{ github_response.json | selectattr('name', 'match', '.*\\.war$') | list }}"
 
-on:
-  workflow_dispatch:
-    inputs:
-      version:
-        description: 'WAR Version to Deploy'
-        required: true
-        default: '1111'
-
-jobs:
-  deploy:
-    runs-on:
-      group: rakbank-self-hosted-runner
-      labels: dehitdevtra1
-    steps: 
-      - name: Checkout Ansible playbook
-        uses: actions/checkout@v2
-
-      - name: Run playbook
-        env:
-          TOKEN_GITHUB: ${{ secrets.TOKEN_GITHUB }}
-        run: |
-          cd ${{ github.workspace }}
-          ansible-playbook -b --extra-vars "target=target_jb war_file_url=https://maven.pkg.github.com/Rakbank-DEH-Onboarding/SMEDigitalBank/com/rakbank/infosys/lib/smedigitalbank/${{ github.event.inputs.version }}/smedigitalbank-${{ github.event.inputs.version }}.war" ./playbook/smedeployment.yml
+- name: Reload JBoss to deploy changes
+  ansible.builtin.shell:
+    cmd: "sh /opt/wildfly/bin/jboss-cli.sh --connect command=:reload"
