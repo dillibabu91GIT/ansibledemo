@@ -1,4 +1,4 @@
-name: Deploy War Files
+name: Deploy JBoss Server
 
 on:
   push:
@@ -12,6 +12,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
       - name: Set up JDK
         uses: actions/setup-java@v2
         with:
@@ -20,6 +25,6 @@ jobs:
 
       - name: Run Ansible playbook
         env:
-          ANSIBLE_HOST_KEY_CHECKING: "false"
+          ANSIBLE_HOST_KEY_CHECKING: "False"
         run: |
           ansible-playbook -i inventory.txt playbook/main.yml
