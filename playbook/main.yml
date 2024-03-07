@@ -1,5 +1,5 @@
 - name: Deploy War Files to JBoss
-  hosts: 3.109.5.198
+  hosts: target1
   become: yes
 
   tasks:
