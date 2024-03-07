@@ -7,6 +7,7 @@
       include_vars:
         file: Ansible-2/config.yml
     
-    - name: role
+    - name: Include ansible-role-jboss-deploy
       include_role:
-        file: Ansible-1/role
+        name: ansible-role-jboss-deploy  # Specify the name of the role to include
+
