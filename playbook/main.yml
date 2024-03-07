@@ -5,8 +5,8 @@
   tasks:
     - name: Read configuration from config.yml
       include_vars:
-        file: /root/ansible-jboss/ansible-config-jboss-deploy/config.yml
+        file: Ansible-2/config.yml
     
-    - name: Include ansible-role-jboss-deploy
+    - name: role
       include_role:
-        name: ansible-role-jboss-deploy
+        file: Ansible-1/role
