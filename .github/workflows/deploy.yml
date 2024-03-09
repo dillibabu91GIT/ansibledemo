@@ -15,6 +15,5 @@ jobs:
           ANSIBLE_HOST_KEY_CHECKING: "False"
           ANSIBLE_CONFIG: "./ansible.cfg"
           GITHUB_WORKSPACE: ${{ github.workspace }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           ansible-playbook -i inventory.txt playbook/main.yml
