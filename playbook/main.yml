@@ -3,9 +3,9 @@
   become: yes
 
   tasks:
-    - name: Read configuration from config.yml
+    - name: Read configuration from ansible.cfg
       include_vars:
-        file: "{{ GITHUB_WORKSPACE }}/config.yml"
+        file: "{{ GITHUB_WORKSPACE }}/ansible.cfg"
 
     - name: Include ansible-role-jboss-deploy
       include_role:
