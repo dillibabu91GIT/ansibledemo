@@ -1,7 +1,7 @@
 name: Deploy JBoss Server
 
 on:
- workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -13,8 +13,6 @@ jobs:
       - name: Run Ansible playbook
         env:
           ANSIBLE_HOST_KEY_CHECKING: "False"
-          ANSIBLE_CONFIG: "./ansible.cfg"  # Path to your ansible.cfg file, if required
-          GITHUB_WORKSPACE: ${{ github.workspace }}  # Pass the GitHub workspace directory
+          ANSIBLE_CONFIG: "./ansible.cfg"
         run: |
           ansible-playbook -i inventory.txt playbook/main.yml
-
