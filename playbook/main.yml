@@ -1,3 +1,4 @@
+
 - name: Deploy War Files to JBoss
   hosts: target1
   become: yes
@@ -7,6 +8,11 @@
       include_vars:
         file: "{{ GITHUB_WORKSPACE }}/config.yml"
 
-    - name: Include ansible-role-jboss-deploy
+    - name: Include ansible-role-jboss-deploy from another repository
       include_role:
-        name: ansible-role-jboss-deploy
+        name: ../Ansible1/ansible-role-jboss-deploy
+        tasks:
+          - name: Task 1
+            debug:
+              msg: "This is a task from the ansible-role-jboss-deploy role"
+     
