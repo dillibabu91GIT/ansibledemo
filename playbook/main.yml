@@ -5,8 +5,9 @@
   tasks:
     - name: Read configuration from config.yml
       include_vars:
-        file: "{{ env.GITHUB_WORKSPACE }}/config.yml"
+        file: "{{ github.workspace }}/config.yml"
 
     - name: Include ansible-role-jboss-deploy
       include_role:
         name: ansible-role-jboss-deploy
+
