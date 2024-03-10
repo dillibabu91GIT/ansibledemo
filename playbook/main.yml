@@ -11,7 +11,9 @@
       include_role:
         name: ansible-role-jboss-deploy
       vars:
-        roles_path: ansible-role-jboss-deploy/tasks/main.yml
+        roles_path: /path/to/ansible-role-jboss-deploy/tasks/main.yml
+
+
 
 
 
