@@ -10,7 +10,10 @@
 
     - name: Include ansible-role-jboss-deploy from another repository
       include_role:
-        name: dillibabu91GIT.Ansible-1.ansible-role-jboss-deploy
+        name: ansible-role-jboss-deploy
+      vars:
+        github_repo_owner: "dillibabu91GIT"
+        github_repo_name: "Ansible-1"
 
 
 
