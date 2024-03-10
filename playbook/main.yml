@@ -8,11 +8,8 @@
       include_vars:
         file: "{{ GITHUB_WORKSPACE }}/config.yml"
 
-    - name: Include ansible-role-jboss-deploy from another repository
-      include_role:
-        name: dillibabu91GIT.Ansible-1.ansible-role-jboss-deploy
-
-
+    - name: Include jboss-deploy in same repo
+      include: main1.yml
 
 
 
