@@ -11,4 +11,4 @@
       include_role:
         name: ansible-1
       vars:
-        roles_path: /path/to/Ansible-1/ansible-role-jboss-deploy
+        roles_path: /path/to/Ansible-1/ansible-role-jboss-deploy/
