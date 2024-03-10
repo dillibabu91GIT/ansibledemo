@@ -17,3 +17,4 @@ jobs:
           GITHUB_WORKSPACE: ${{ github.workspace }}
         run: |
           ansible-playbook -i inventory.txt playbook/main.yml
+
