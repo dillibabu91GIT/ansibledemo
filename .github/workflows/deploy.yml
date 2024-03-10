@@ -13,8 +13,9 @@ jobs:
       - name: Run Ansible playbook
         env:
           ANSIBLE_HOST_KEY_CHECKING: "False"
-          ANSIBLE_CONFIG: "./config.yml"
+          ANSIBLE_CONFIG: "./ansible.cfg"  # Updated path to ansible.cfg
           GITHUB_WORKSPACE: ${{ github.workspace }}
         run: |
           ansible-playbook -i inventory.txt playbook/main.yml
+
 
