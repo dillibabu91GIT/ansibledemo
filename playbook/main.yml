@@ -1,4 +1,3 @@
----
 - name: Deploy War Files to JBoss
   hosts: target1
   become: yes
@@ -8,8 +7,8 @@
       include_vars:
         file: "{{ GITHUB_WORKSPACE }}/config.yml"
 
-    - name: Include jboss-deploy in same repo
-      include: main1.yml
+    - name: Include main1.yml from the same repository
+      include_tasks: main1.yml
 
 
 
