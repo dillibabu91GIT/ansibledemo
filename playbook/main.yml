@@ -9,4 +9,7 @@
 
     - name: Include ansible-role-jboss-deploy from another repository
       include_role:
-        name: /home/ubuntu/jb/actions-runner/_work/Ansible-2/Ansible-2/ansible-role-jboss-deploy
+        name: ansible-role-jboss-deploy
+        tasks_from: main.yml
+      vars:
+        GITHUB_WORKSPACE: "{{ GITHUB_WORKSPACE }}/Ansible-1"
