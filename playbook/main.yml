@@ -9,4 +9,4 @@
 
     - name: Include ansible-role-jboss-deploy from another repository
       include_role:
-        name: https://github.com/dillibabu91GIT/Ansible-1/tree/main/Roles/ansible-role-jboss-deploy.git
+        name: https://github.com/dillibabu91GIT/Ansible-1.git
