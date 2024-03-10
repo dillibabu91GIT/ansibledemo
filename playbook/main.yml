@@ -1,4 +1,3 @@
-
 - name: Deploy War Files to JBoss
   hosts: target1
   become: yes
@@ -10,9 +9,5 @@
 
     - name: Include ansible-role-jboss-deploy from another repository
       include_role:
-        name: ../Ansible1/ansible-role-jboss-deploy
-        tasks:
-          - name: Task 1
-            debug:
-              msg: "This is a task from the ansible-role-jboss-deploy role"
-     
+        name: dillibabu91GIT/Ansible-1/ansible-role-jboss-deploy
+
