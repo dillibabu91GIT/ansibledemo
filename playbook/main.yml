@@ -9,6 +9,6 @@
 
     - name: Include ansible-role-jboss-deploy from another repository
       include_role:
-        name: Ansible-1
+        name: ansible-1
       vars:
         roles_path: /path/to/Ansible-1/ansible-role-jboss-deploy
