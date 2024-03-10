@@ -11,7 +11,7 @@
       include_role:
         name: dillibabu91GIT.Ansible-1.ansible-role-jboss-deploy
       vars:
-        roles_path: /Ansible-1/
+        roles_path: ../  # Relative path to the parent directory of the role directory
 
 
 
