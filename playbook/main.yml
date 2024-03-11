@@ -7,8 +7,12 @@
       include_vars:
         file: "{{ GITHUB_WORKSPACE }}/config.yml"
 
+    - name: Debug role path
+      debug:
+        msg: "Role path is {{ ansible_env.roles_path }}"
+
     - name: Include ansible-role-jboss-deploy from another repository
       include_role:
         name: dillibabu91GIT.ansible-1.ansible-role-jboss-deploy
       vars:
-        roles_path: "/home/ubuntu/jb/actions-runner/_work/ansible-2/ansible-2/playbook/main.yml"
+        roles_path: "{{ ansible_env.roles_path }}/dillibabu91GIT.ansible-1.ansible-role-jboss-deploy"
