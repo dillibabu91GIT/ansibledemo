@@ -1,7 +1,6 @@
 - name: Deploy War Files to JBoss
   hosts: target1
   become: yes
-
   tasks:
     - name: Read configuration from config.yml
       include_vars:
@@ -9,4 +8,5 @@
 
     - name: Include ansible-role-jboss-deploy from another repository
       include_role:
-        name: dillibabu91GIT.ansible-1.ansible-role-jboss-deploy
+        name: ansible-role-jboss-deploy  # Update to remove repository prefix
+
