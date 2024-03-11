@@ -9,6 +9,4 @@
 
     - name: Include ansible-role-jboss-deploy from another repository
       include_role:
-        name: dillibabu91GIT.ansible-1.ansible-role-jboss-deploy
-      vars:
-        roles_path: "/home/ubuntu/jb/actions-runner/_work/ansible-1/ansible-1/playbook/roles"
+        name: /etc/ansible/roles/dillibabu91GIT.ansible-1.ansible-role-jboss-deploy
