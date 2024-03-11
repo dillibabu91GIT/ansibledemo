@@ -9,7 +9,6 @@
 
     - name: Include ansible-role-jboss-deploy from another repository
       include_role:
-        name: dillibabu91GIT.ansible-role-jboss-deploy
-        tasks_from: main.yml
+        name: ansible-role-jboss-deploy
       vars:
-        GITHUB_WORKSPACE: "{{ GITHUB_WORKSPACE }}"
+        roles_path: /home/ubuntu/jb/actions-runner/_work/ansible-2/ansible-2/playbook
