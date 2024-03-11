@@ -1,3 +1,6 @@
+repo1:
+workflow
+
 name: Deploy JBoss Server
 
 on:
@@ -5,19 +8,14 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Checkout roles repository
-        uses: actions/checkout@v2
-        with:
-          repository: dillibabu91GIT/ansible-1
-          path: /etc/ansible/roles:/dillibabu91GIT/ansible-1/roles
-
       - name: Run Ansible playbook
         env:
           ANSIBLE_HOST_KEY_CHECKING: "False"
+          ANSIBLE_CONFIG: "./ansible.cfg"
         run: |
-          ansible-playbook -i inventory.txt playbook/main.yml --extra-vars "GITHUB_WORKSPACE=${{ github.workspace }}"
+          ansible-playbook -vvv -i inventory.txt playbook/main.yml --extra-vars "GITHUB_WORKSPACE=${{ github.workspace }}"
