@@ -8,5 +8,5 @@
 
     - name: Include ansible-role-jboss-deploy from another repository
       include_role:
-        name: ansible-role-jboss-deploy  # Update to remove repository prefix
+        name: ansible-role-jboss-deploy  
 
