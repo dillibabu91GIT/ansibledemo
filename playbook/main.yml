@@ -17,6 +17,4 @@
 
     - name: Include ansible-role-jboss-deploy from another repository
       include_role:
-        name: dillibabu91GIT.ansible-1.ansible-role-jboss-deploy
-      vars:
-        roles_path: "{{ roles_path }}"
+        name: "/etc/ansible/roles/dillibabu91GIT.ansible-1.ansible-role-jboss-deploy"
