@@ -3,9 +3,9 @@
   become: yes
 
   tasks:
-    - #name: Read configuration from config.yml
-      #include_vars:
-       # file: "{{ GITHUB_WORKSPACE }}/config.yml"
+    - name: Read configuration from config.yml
+      include_vars:
+        file: "{{ GITHUB_WORKSPACE }}/config.yml"
 
     - name: Set roles_path variable
       set_fact:
