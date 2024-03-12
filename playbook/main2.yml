@@ -8,5 +8,5 @@
 
     - name: Include ansible-role-jboss-deploy 
       include_role:
-        name: ../ansible-1/ansible-role-jboss-deploy  # Adjust the path as necessary
+        name: ../ansible-2/ansible-role-jboss-deploy  # Adjust the path as necessary
 
