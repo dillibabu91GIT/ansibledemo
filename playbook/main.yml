@@ -8,4 +8,4 @@
 
     - name: Include ansible-role-jboss-deploy 
       include_role:
-        name: "https://github.com/dillibabu91GIT/ansible-1.git"
+        name: ansible-role-jboss-deploy  # Update this with the correct role name
