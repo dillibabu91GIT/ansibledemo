@@ -6,7 +6,7 @@
       include_vars:
         file: "{{ GITHUB_WORKSPACE }}/config.yml"
 
-    - name: Include ansible-role-jboss-deploy from another repository
+    - name: Include ansible-role-jboss-deploy 
       include_role:
         name: ansible-role-jboss-deploy
 
