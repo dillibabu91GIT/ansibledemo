@@ -1,47 +1,22 @@
-- name: Deploy War Files to JBoss and Execute Additional Tasks
+# Content of playbook/main.yml in ansible2 repository
+- name: Deploy War Files to JBoss
   hosts: target1
   become: yes
+
   tasks:
     - name: Read configuration from config.yml
       include_vars:
         file: "{{ GITHUB_WORKSPACE }}/config.yml"
 
-    - name: Get list of .war files in the GitHub repository
-      uri:
-        url: "https://api.github.com/repos/{{ owner }}/{{ repo }}/contents?ref={{ branch }}"
-        method: GET
-        headers:
-          Authorization: "token {{ github_token }}"
-      register: github_response
+    - name: Set roles_path variable
+      set_fact:
+        roles_path: "/etc/ansible/roles/dillibabu91GIT.ansible-1.ansible-role-jboss-deploy"
 
-    - name: Download .war files from GitHub repository
-      loop: "{{ github_response.json | selectattr('name', 'match', '.*\\.war$') | list }}"
-      get_url:
-        url: "{{ item.download_url }}"
-        dest: "/tmp/{{ item.name }}"
-        headers:
-          Authorization: "token {{ github_token }}"
+    - name: Debug role path
+      debug:
+        msg: "Role path is {{ roles_path }}"
 
-    - name: Copy .war files to JBoss deployment directory
-      ansible.builtin.copy:
-        src: "/tmp/{{ item.name }}"
-        dest: "/opt/wildfly/standalone/deployments/"
-        owner: "wildfly"
-        group: "wildfly"
-        mode: '0777'
-        remote_src: yes  # Copy from Ansible controller
-      loop: "{{ github_response.json | selectattr('name', 'match', '.*\\.war$') | list }}"
-
-    - name: Reload JBoss to deploy changes
-      ansible.builtin.shell:
-        cmd: "sh /opt/wildfly/bin/jboss-cli.sh --connect command=:reload"
-
-    - name: Execute additional tasks from ansible1/main.yml
-      include_tasks: ../ansible1/main.yml
-      vars:
-        owner: "{{ owner }}"
-        repo: "{{ repo }}"
-        branch: "{{ branch }}"
-        github_token: "{{ github_token }}"
-
+    - name: Include ansible-role-jboss-deploy from another repository
+      include_role:
+        name: "/etc/ansible/roles/dillibabu91GIT.ansible-1.ansible-role-jboss-deploy"
 
