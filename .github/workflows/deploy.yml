@@ -8,7 +8,13 @@ jobs:
     runs-on: self-hosted
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+        
+      - name: list command
+        run: |
+          ls -al
+          pwd
+           
 
       - name: Run Ansible playbook
         env:
