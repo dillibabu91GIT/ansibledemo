@@ -1,6 +1,6 @@
 # Content of config.yml in ansible2 repository
 jboss_controller: "3.109.5.198:9990"
-github_token: "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"
+github_token: "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"
 owner: "dillibabu91GIT"
 repo: "ansible-1"
 branch: "main"
