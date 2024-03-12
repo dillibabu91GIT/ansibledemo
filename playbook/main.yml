@@ -10,5 +10,4 @@
       include_role:
         name: ansible-role-jboss-deploy
       vars:
-        github_token = "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"
-
+        github_token: "your_github_token_here"
