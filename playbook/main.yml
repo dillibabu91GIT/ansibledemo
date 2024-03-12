@@ -6,6 +6,9 @@
       include_vars:
         file: "{{ GITHUB_WORKSPACE }}/config.yml"
 
-    - name: Include ansible-role-jboss-deploy from ansible-1
+    - name: Include ansible-role-jboss-deploy 
       include_role:
         name: ansible-role-jboss-deploy
+      vars:
+        github_token: "your_github_token_here"
+
