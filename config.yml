@@ -1,8 +1,10 @@
+# Content of config.yml in ansible2 repository
 jboss_controller: "3.109.5.198:9990"
 github_token: "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"
 owner: "dillibabu91GIT"
-repo: "jboss-deploy"
+repo: "ansible-1"
 branch: "main"
 jboss_user: "demo"
 jboss_password: "test123"
+
 
