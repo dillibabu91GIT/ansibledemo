@@ -1,3 +1,4 @@
+# Content of .github/workflows/deploy.yml in ansible2 repository
 name: Deploy JBoss Server
 
 on:
