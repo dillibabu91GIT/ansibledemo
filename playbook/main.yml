@@ -8,5 +8,5 @@
 
     - name: Include ansible-role-jboss-deploy 
       include_roles:
-        name: ansible-role-jboss-deploy
+        name: https://github.com/dillibabu91GIT/ansible-1.git
      
