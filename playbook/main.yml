@@ -7,6 +7,6 @@
         file: "{{ GITHUB_WORKSPACE }}/config.yml"
 
     - name: Include ansible-role-jboss-deploy 
-      include_tasks:
+      include_roles:
         name: ansible-role-jboss-deploy
      
