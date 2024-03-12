@@ -9,5 +9,4 @@
     - name: Include ansible-role-jboss-deploy 
       include_role:
         name: ansible-role-jboss-deploy
-      vars:
-        github_token: "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"
+     
