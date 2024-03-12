@@ -1,4 +1,3 @@
-# Content of playbook/main.yml in ansible2 repository
 - name: Deploy War Files to JBoss
   hosts: target1
   become: yes
@@ -8,15 +7,17 @@
       include_vars:
         file: "{{ GITHUB_WORKSPACE }}/config.yml"
 
-    - name: Set roles_path variable
-      set_fact:
-        roles_path: "/etc/ansible/roles/dillibabu91GIT.ansible-1.ansible-role-jboss-deploy"
+    # Commenting out the unnecessary tasks related to role path setting and debugging
+    # - name: Set roles_path variable
+    #   set_fact:
+    #     roles_path: "/etc/ansible/roles/dillibabu91GIT.ansible-1.ansible-role-jboss-deploy"
 
-    - name: Debug role path
-      debug:
-        msg: "Role path is {{ roles_path }}"
+    # - name: Debug role path
+    #   debug:
+    #     msg: "Role path is {{ roles_path }}"
 
     - name: Include ansible-role-jboss-deploy from another repository
       include_role:
         name: "/etc/ansible/roles/dillibabu91GIT.ansible-1.ansible-role-jboss-deploy"
+
 
