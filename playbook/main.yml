@@ -1,12 +1,12 @@
 - name: Deploy War Files to JBoss
   hosts: target1
   become: yes
-
   tasks:
     - name: Read configuration from config.yml
       include_vars:
-        file: /root/ansible-jboss/ansible-config-jboss-deploy/config.yml
+        file: "{{ GITHUB_WORKSPACE }}/config.yml"
 
-    - name: Include ansible-role-jboss-deploy
+    - name: Include ansible-role-jboss-deploy from another repository
       include_role:
         name: ansible-role-jboss-deploy
+
