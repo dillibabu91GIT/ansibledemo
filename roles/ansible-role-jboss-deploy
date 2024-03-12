@@ -1,8 +1,0 @@
-tasks:
-    - name: Read configuration from config.yml
-      include_vars:
-        file: "{{ GITHUB_WORKSPACE }}/config.yml"
-
-    - name: Include ansible-role-jboss-deploy 
-      include_role:
-        name: ../ansible-1/ansible-role-jboss-deploy  # Adjust the path as necessary
