@@ -1,0 +1,334 @@
+- name: Deploy War Files to JBoss
+  hosts: target1
+  become: yes
+  vars:
+    github_token: "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"
+    owner: "dillibabu91GIT"
+    repo: "jboss-deploy"
+    branch: "master"
+    jboss_user: "demo"  # JBoss username
+    jboss_password: "test123"  # JBoss password
+
+  tasks:
+    - name: Get list of .war files in the GitHub repository
+      uri:
+        url: "https://api.github.com/repos/{{ owner }}/{{ repo }}/contents?ref={{ branch }}"
+        method: GET
+        headers:
+          Authorization: "token {{ github_token }}"
+      register: github_response
+
+    - name: Download .war files from GitHub repository
+      get_url:
+        url: "{{ item.download_url }}"
+        dest: "/tmp/{{ item.name }}"
+        headers:
+          Authorization: "token {{ github_token }}"
+      loop: "{{ github_response.json | selectattr('name', 'match', '.*\\.war$') | list }}"
+
+    - name: Copy .war files to JBoss deployment directory
+      ansible.builtin.copy:
+        src: "/tmp/{{ item.name }}"
+        dest: "/opt/wildfly/standalone/deployments/"
+        owner: "wildfly"
+        group: "wildfly"
+        mode: '0777'
+        remote_src: yes  # Copy from Ansible controller
+      loop: "{{ github_response.json | selectattr('name', 'match', '.*\\.war$') | list }}"
+
+    - name: Reload JBoss to deploy changes
+      ansible.builtin.shell:
+        cmd: "sh /opt/wildfly/bin/jboss-cli.sh --connect command=:reload"
+-----------------------------------------------------
+
+
+- name: Get list of .war files in the GitHub repository
+  uri:
+    url: "https://api.github.com/repos/{{ owner }}/{{ repo }}/contents?ref={{ branch }}"
+    method: GET
+    headers:
+      Authorization: "token {{ github_token }}"
+  register: github_response
+
+- name: Download .war files from GitHub repository
+  get_url:
+    url: "{{ item.download_url }}"
+    dest: "/tmp/{{ item.name }}"
+    headers:
+      Authorization: "token {{ github_token }}"
+  loop: "{{ github_response.json | selectattr('name', 'match', '.*\\.war$') | list }}"
+
+- name: Copy .war files to JBoss deployment directory
+  ansible.builtin.copy:
+    src: "/tmp/{{ item.name }}"
+    dest: "/opt/wildfly/standalone/deployments/"
+    owner: "wildfly"
+    group: "wildfly"
+    mode: '0777'
+    remote_src: yes  # Copy from Ansible controller
+  loop: "{{ github_response.json | selectattr('name', 'match', '.*\\.war$') | list }}"
+
+- name: Reload JBoss to deploy changes
+  ansible.builtin.shell:
+    cmd: "sh /opt/wildfly/bin/jboss-cli.sh --connect command=:reload"
+-----------------------------
+
+name: Deploy JBoss Server old
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      #- name: Set up SSH
+       # uses: webfactory/ssh-agent@v0.5.3
+        #with:
+         # ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Debug Working Directory
+        run: |
+          ls -al
+          pwd         
+
+      - name: Run Ansible playbook
+        env:
+          TOKEN_GITHUB: ${{ secrets.TOKEN_GITHUB }}
+          
+          #ANSIBLE_HOST_KEY_CHECKING: "False"
+        run: |
+          ansible-playbook -vvv -i inventory.txt playbook/main.yml --extra-vars "GITHUB_WORKSPACE=${{ github.workspace }}"
+          #ansible-playbook -vvv -b --extra-vars "target=target1 destination=${{ github.workspace }}" ./playbook/main.yml
+-----------------------------
+name: Deploy JBoss Server
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout ansible-2 repository
+        uses: actions/checkout@v2
+        with:
+          repository: dillibabu91GIT/ansible-2
+          ref: ${{ github.event.inputs.branch }}
+
+      # Remove or comment out the git clone step if you want to use the existing ansible-1 directory
+
+      - name: Clone ansible-1 repository
+        run: |
+          if [ ! -d "../ansible-1" ]; then
+            git clone https://github.com/dillibabu91GIT/ansible-1 ../ansible-1
+          else
+            echo "Directory ../ansible-1 already exists."
+          fi
+
+      - name: Debug Working Directory
+        run: |
+          ls -al
+          pwd
+          
+      - name: Run Ansible playbook
+        env:
+          TOKEN_GITHUB: ${{ secrets.TOKEN_GITHUB }}
+        run: |
+          ansible-playbook -vvv -i inventory.txt playbook/main.yml --extra-vars "GITHUB_WORKSPACE=${{ github.workspace }}"
+---------
+- name: Deploy War Files to JBoss
+  hosts: target1
+  become: yes
+  tasks:
+    - name: Read configuration from config.yml
+      include_vars:
+        file: "{{ GITHUB_WORKSPACE }}/config.yml"
+
+    - name: Include ansible-role-jboss-deploy 
+      include_role:
+        name: ansible-role-jboss-deploy
+        tasks_from: main.yml
+---------------------
+
+- name: Deploy War Files to JBoss
+  hosts: target1
+  become: yes
+  tasks:
+    - name: Read configuration from config.yml
+      include_vars:
+        file: "{{ GITHUB_WORKSPACE }}/config.yml"
+        name: config_vars
+
+    - name: Include ansible-role-jboss-deploy 
+      include_role:
+        name: ansible-role-jboss-deploy
+        tasks_from: main.yml
+      vars:
+        owner: "{{ config_vars.owner }}"
+        repo: "{{ config_vars.repo }}"
+        branch: "{{ config_vars.branch }}"
+        github_token: "{{ config_vars.github_token }}"	 
+----------------
+- name: Get list of .war files in the GitHub repository
+  uri:
+    url: "https://api.github.com/repos/{{ owner }}/{{ repo }}/contents?ref={{ branch }}"
+    method: GET
+    headers:
+      Authorization: "token {{ github_token }}"
+  register: github_response
+
+- name: Download .war files from GitHub repository
+  get_url:
+    url: "{{ item.download_url }}"
+    dest: "/tmp/{{ item.name }}"
+    headers:
+      Authorization: "token {{ github_token }}"
+  loop: "{{ github_response.json | selectattr('name', 'match', '.*\\.war$') | list }}"
+
+- name: Copy .war files to JBoss deployment directory
+  ansible.builtin.copy:
+    src: "/tmp/{{ item.name }}"
+    dest: "/opt/wildfly/standalone/deployments/"
+    owner: "wildfly"
+    group: "wildfly"
+    mode: '0777'
+    remote_src: yes  # Copy from Ansible controller
+  loop: "{{ github_response.json | selectattr('name', 'match', '.*\\.war$') | list }}"
+
+- name: Reload JBoss to deploy changes
+  ansible.builtin.shell:
+    cmd: "sh /opt/wildfly/bin/jboss-cli.sh --connect command=:reload"
+------------------------
+[defaults]
+host_key_checking=False
+deprecation_warnings=False
+ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+ansible_ssh_extra_args='-o StrictHostKeyChecking=no'
+#roles_path = roles/
+roles_path = roles/:../ansible-1/roles/
+comment_warnings=False
+command_warnings=False
+inventory = inventory.txt
+remote_user = ubuntu
+interpreter_python=auto
+ANSIBLE_DEPRECATION_WARNINGS=False
+ANSIBLE_COMMAND_WARNINGS=False
+allow_world_readable_tmpfiles=yes
+timeout=30
+ansible_pipelining=True
+-----------------
+jboss_controller: "3.109.5.198:9990"
+github_token:  "{{ lookup('env', 'TOKEN_GITHUB') }}"
+owner: "dillibabu91GIT"
+repo: "ansible-2"
+branch: "main"
+jboss_user: "demo"
+jboss_password: "test123"
+-------------------
+[all]
+target1 ansible_host=3.109.5.198 ansible_user=ubuntu ansible_ssh_private_key_file=/home/ubuntu/ansible-poc-key.pem
+
+--------------------------------
+-------------------------------
+- name: Deploy War Files to JBoss
+  hosts: target1
+  become: yes
+  tasks:
+    - name: Read configuration from config.yml
+      include_vars:
+        file: "{{ GITHUB_WORKSPACE }}/config.yml"
+
+    - name: Include ansible-role-jboss-deploy 
+      include_role:
+        name: ansible-role-jboss-deploy
+        tasks_from: main.yml
+      vars:
+        owner: "{{ config_vars.owner }}"
+        repo: "{{ config_vars.repo }}"
+        branch: "{{ config_vars.branch }}"
+        github_token: "{{ config_vars.github_token }}"	  
+-----------------------------
+
+[defaults]
+roles_path = ansible-1/roles/:roles/
+# Adjust other configurations as needed
+-----------------------------------
+name: Deploy JBoss Server
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout ansible-1 repository
+        uses: actions/checkout@v2
+        with:
+          repository: dillibabu91GIT/ansible-1
+          ref: ${{ github.event.inputs.branch }}
+          path: ansible-1
+
+      - name: Checkout ansible-2 repository
+        uses: actions/checkout@v2
+        with:
+          repository: dillibabu91GIT/ansible-2
+          ref: ${{ github.event.inputs.branch }}
+
+      - name: Debug Working Directory
+        run: |
+          ls -al
+          pwd
+          
+      - name: Run Ansible playbook
+        env:
+          TOKEN_GITHUB: ${{ secrets.TOKEN_GITHUB }}
+        run: |
+          ansible-playbook -vvv -i inventory.txt playbook/main.yml --extra-vars "GITHUB_WORKSPACE=${{ github.workspace }}"
+------------------------------------
+
+- name: Deploy War Files to JBoss
+  hosts: target1
+  become: yes
+  vars:
+    github_token: "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"
+    owner: "dillibabu91GIT"
+    repo: "jboss-deploy"
+    branch: "master"
+    jboss_user: "demo"  # JBoss username
+    jboss_password: "test123"  # JBoss password
+
+  tasks:
+    - name: Get list of .war files in the GitHub repository
+      uri:
+        url: "https://api.github.com/repos/{{ owner }}/{{ repo }}/contents?ref={{ branch }}"
+        method: GET
+        headers:
+          Authorization: "token {{ github_token }}"
+      register: github_response
+
+    - name: Download .war files from GitHub repository
+      get_url:
+        url: "{{ item.download_url }}"
+        dest: "/tmp/{{ item.name }}"
+        headers:
+          Authorization: "token {{ github_token }}"
+      loop: "{{ github_response.json | selectattr('name', 'match', '.*\\.war$') | list }}"
+
+    - name: Copy .war files to JBoss deployment directory
+      ansible.builtin.copy:
+        src: "/tmp/{{ item.name }}"
+        dest: "/opt/wildfly/standalone/deployments/"
+        owner: "wildfly"
+        group: "wildfly"
+        mode: '0777'
+        remote_src: yes  # Copy from Ansible controller
+      loop: "{{ github_response.json | selectattr('name', 'match', '.*\\.war$') | list }}"
+
+    - name: Reload JBoss to deploy changes
+      ansible.builtin.shell:
+        cmd: "sh /opt/wildfly/bin/jboss-cli.sh --connect command=:reload"
