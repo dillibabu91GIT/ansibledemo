@@ -3,4 +3,6 @@
 3.109.5.198 ansible_user=ubuntu ansible_ssh_private_key_file=/home/ubuntu/ansible-poc-key.pem
 
 
-I am currently unable to access GitHub completely. After entering my login credentials on GitHub, it is asking for a Rakbank mail OTP, but I am not receiving the email. I suspect it might be due to an organization permission issue.
+I can’t share the mail from optimum to rakbank mail, kindly resolve it this also
+otherwise github working completely.
+
