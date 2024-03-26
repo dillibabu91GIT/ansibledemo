@@ -3,6 +3,5 @@
 3.109.5.198 ansible_user=ubuntu ansible_ssh_private_key_file=/home/ubuntu/ansible-poc-key.pem
 
 
-I can’t share the mail from optimum to rakbank mail, kindly resolve it this also
-otherwise github working completely.
+I am unable to forward the OTP email from Optimum to the Rakbank mail. Kindly resolve this issue. Otherwise, GitHub is working fine for me.
 
